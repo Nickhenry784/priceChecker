@@ -1,60 +1,89 @@
 import { StyleSheet } from 'react-native';
 
-export const firstStyle = (x, y) =>
+export const bottlesStyle = x =>
   StyleSheet.create({
-    width: 80,
-    height: 80,
-    position: 'absolute',
-    top: x,
-    left: y,
+    transfrom: { rotate: '10deg' },
+    width: 140,
+    height: 160,
+    marginBottom: 20,
     alignItems: 'center',
+    backgroundColor: 'red',
     justifyContent: 'center',
-    resizeMode: 'contain',
   });
 
 export const appStyle = StyleSheet.create({
-  buyImage: {
-    position: 'absolute',
-    top: '10%',
-    right: '5%',
-    width: 130,
+  heartButton: {
+    width: 80,
     height: 50,
+    position: 'absolute',
+    top: '2%',
+    left: '5%',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  heartImage: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
   },
   turnText: {
     fontFamily: 'LightBeach',
-    fontSize: 20,
-    color: 'white',
+    fontSize: 30,
+    color: 'red',
   },
   backText: {
     position: 'absolute',
     paddingTop: 20,
     left: '5%',
     fontFamily: 'LightBeach',
-    fontSize: 20,
+    fontSize: 30,
     color: 'black',
   },
   homeView: {
-    flex: 1,
+    marginTop: 80,
+    width: '100%',
+    height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  welcomeText: {
-    width: 250,
-    height: 30,
+  resultView: {
+    width: '70%',
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  firstView: {
-    width: '90%',
-    height: 500,
-  },
-
-  firstImage: {
+  resultImage: {
+    width: 300,
+    height: 200,
     resizeMode: 'contain',
-    width: 80,
-    height: 80,
+  },
+  bottlesView: {
+    width: '100%',
+    height: 370,
+    alignItems: 'center',
+    paddingLeft: 30,
+    justifyContent: 'center',
+  },
+  bottlesImage: {
+    width: 100,
+    height: 170,
+    resizeMode: 'contain',
+  },
+  stateResult: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+    position: 'absolute',
+    top: '0%',
+    right: '8%',
+    zIndex: 3,
+  },
+  playImage: {
+    width: 150,
+    height: 100,
+    resizeMode: 'contain',
   },
 });
 

@@ -1,44 +1,129 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, Alert, Animated } from 'react-native';
 import { images } from 'assets/images';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { SizedBox } from 'sizedbox';
+import { FlatGrid } from 'react-native-super-grid';
+import { randomIntFromInterval } from 'utils/number';
 import { makeSelectIsPlayState, makeSelectTurn } from './selectors';
-import { appStyle, firstStyle } from './style';
-import firstData from './data/firstData';
-import PlayPage from './PlayPage';
-import { setPlayState } from './actions';
+import { appStyle } from './style';
+import { decrementTurn } from './actions';
 
-function HomePage({ dispatch, turn, isPlayState }) {
-  const [firstItem, setFirstItem] = useState(null);
+const listBottlesImage = [
+  images.home.bottles1,
+  images.home.bottles2,
+  images.home.bottles3,
+  images.home.bottles4,
+];
 
-  const onClickFirstItem = value => {
-    if (turn === 0) return Alert.alert('Please buy more turn');
-    dispatch(setPlayState(true));
-    // console.log(listPositionValue.length);
-    setFirstItem(value);
+function HomePage({ dispatch, turn }) {
+  const [rotateList, setRotateList] = useState([0, 0, 0, 0]);
+  const [play, setPlay] = useState(false);
+  const [time, setTime] = useState(300);
+  const resultValue = useRef(4);
+
+  useEffect(() => {
+    const timeCountDown = 5;
+    const coutDown = setTimeout(() => {
+      if (play && time <= 0) {
+        setPlay(false);
+        setTime(300);
+        dispatch(decrementTurn());
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < listBottlesImage.length; index++) {
+          const element = rotateList[index];
+          if (element === 0) {
+            resultValue.current += 1;
+          }
+        }
+      }
+      if (play && time > 0) {
+        setTime(time - timeCountDown);
+        const list = [...rotateList];
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < listBottlesImage.length; index++) {
+          rotateList[index] =
+            randomIntFromInterval(0, 3) === 0
+              ? randomIntFromInterval(0, 360) * 0
+              : randomIntFromInterval(0, 360);
+          // setRotateList([...rotateList, 0]);
+        }
+      }
+    }, timeCountDown);
+    return () => {
+      clearTimeout(coutDown);
+    };
+  }, [time, play]);
+
+  const onClickPlayButton = () => {
+    if (turn <= 0) {
+      Alert.alert('Please buy more turn');
+      return false;
+    }
+    setPlay(true);
+    resultValue.current = 0;
   };
 
-  return isPlayState ? (
-    <PlayPage first={firstItem} />
-  ) : (
+  return (
     <View style={appStyle.homeView}>
-      <SizedBox vertical={40} />
-      <Image source={images.home.welcomeText} style={appStyle.welcomeText} />
-      <SizedBox vertical={10} />
-      <View style={appStyle.firstView}>
-        {firstData.map(first => (
-          <TouchableOpacity
-            onPress={() => onClickFirstItem(first)}
-            onLongPress={() => onClickFirstItem(first)}
-            style={firstStyle(first.x, first.y)}
-            key={first.id}>
-            <Image source={first.image} style={appStyle.firstImage} />
-          </TouchableOpacity>
-        ))}
+      <View style={appStyle.resultView}>
+        {!play && (
+          <Image
+            source={
+              resultValue.current === 4 ? images.home.win : images.home.lose
+            }
+            style={appStyle.resultImage}
+          />
+        )}
       </View>
+      <SizedBox vertical={10} />
+      <View style={appStyle.bottlesView}>
+        <FlatGrid
+          data={listBottlesImage}
+          spacing={10}
+          renderItem={({ item, index }) => (
+            <View>
+              {!play && (
+                <Image
+                  source={
+                    rotateList[index] === 0
+                      ? images.home.true
+                      : images.home.false
+                  }
+                  style={appStyle.stateResult}
+                />
+              )}
+              <Animated.View
+                style={[
+                  {
+                    width: 140,
+                    height: 160,
+                    marginBottom: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transform: [
+                      {
+                        rotate: `${rotateList[index]}deg`,
+                      },
+                    ],
+                  },
+                ]}>
+                <Image source={item} style={appStyle.bottlesImage} />
+              </Animated.View>
+            </View>
+          )}
+        />
+      </View>
+      <SizedBox vertical={10} />
+      {!play && (
+        <TouchableOpacity
+          onPress={onClickPlayButton}
+          onLongPress={onClickPlayButton}>
+          <Image source={images.home.play} style={appStyle.playImage} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -46,12 +131,10 @@ function HomePage({ dispatch, turn, isPlayState }) {
 HomePage.propTypes = {
   dispatch: PropTypes.func,
   turn: PropTypes.number,
-  isPlayState: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   turn: makeSelectTurn(),
-  isPlayState: makeSelectIsPlayState(),
 });
 
 export default connect(mapStateToProps)(HomePage);

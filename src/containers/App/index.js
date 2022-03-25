@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
@@ -35,10 +35,10 @@ function App({ dispatch, turn, isShowShopping }) {
       ) : (
         <TouchableOpacity
           onPress={onSetShowShopping}
-          onLongPress={onSetShowShopping}>
-          <ImageBackground source={images.home.buy} style={appStyle.buyImage}>
-            <Text style={appStyle.turnText}>{turn}</Text>
-          </ImageBackground>
+          onLongPress={onSetShowShopping}
+          style={appStyle.heartButton}>
+          <Image source={images.home.heart} style={appStyle.heartImage} />
+          <Text style={appStyle.turnText}>{turn}</Text>
         </TouchableOpacity>
       )}
       {isShowShopping ? <Buttons /> : <HomePage />}
