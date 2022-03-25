@@ -1,4 +1,4 @@
-package com.oceanfishsimuappz;
+package com.minibtsimleappflip;
 
 import com.facebook.react.ReactActivity;
 
