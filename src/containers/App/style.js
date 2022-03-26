@@ -1,14 +1,16 @@
 import { StyleSheet } from 'react-native';
 
-export const bottlesStyle = x =>
+export const shopItemStyle = (x, y) =>
   StyleSheet.create({
-    transfrom: { rotate: '10deg' },
-    width: 140,
-    height: 160,
+    width: 60,
+    height: 40,
     marginBottom: 20,
+    position: 'absolute',
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'red',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    top: x,
+    left: y,
   });
 
 export const appStyle = StyleSheet.create({
@@ -27,10 +29,61 @@ export const appStyle = StyleSheet.create({
     height: 50,
     resizeMode: 'contain',
   },
+  priceText: {
+    fontFamily: 'LightBeach',
+    fontSize: 18,
+    color: 'white',
+  },
   turnText: {
     fontFamily: 'LightBeach',
     fontSize: 30,
     color: 'red',
+  },
+  shopItemImage: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  timeView: {
+    width: '30%',
+    height: 50,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timeLabelText: {
+    fontFamily: 'LightBeach',
+    fontSize: 30,
+    color: 'black',
+  },
+  timeText: {
+    fontFamily: 'LightBeach',
+    fontSize: 30,
+    color: 'black',
+  },
+  winImage: {
+    width: 400,
+    height: 300,
+    resizeMode: 'contain',
+  },
+  priceShopItemsImage: {
+    width: 250,
+    height: 200,
+    resizeMode: 'contain',
+  },
+  OKImage: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+  },
+  inputStyle: {
+    width: '60%',
+    backgroundColor: '#eaeaea',
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
   backText: {
     position: 'absolute',
@@ -38,6 +91,11 @@ export const appStyle = StyleSheet.create({
     left: '5%',
     fontFamily: 'LightBeach',
     fontSize: 30,
+    color: 'black',
+  },
+  labelText: {
+    fontSize: 20,
+    fontFamily: 'LightBeach',
     color: 'black',
   },
   homeView: {
@@ -59,17 +117,20 @@ export const appStyle = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
   },
-  bottlesView: {
-    width: '100%',
-    height: 370,
+  shopImgae: {
+    width: 340,
+    height: 400,
+    resizeMode: 'cover',
     alignItems: 'center',
-    paddingLeft: 30,
     justifyContent: 'center',
   },
-  bottlesImage: {
-    width: 100,
-    height: 170,
+  footerImage: {
+    width: 250,
+    height: 250,
     resizeMode: 'contain',
+    position: 'absolute',
+    bottom: '6%',
+    right: '0%',
   },
   stateResult: {
     width: 40,
@@ -81,7 +142,7 @@ export const appStyle = StyleSheet.create({
     zIndex: 3,
   },
   playImage: {
-    width: 150,
+    width: 100,
     height: 100,
     resizeMode: 'contain',
   },

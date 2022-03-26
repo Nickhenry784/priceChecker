@@ -1,0 +1,25 @@
+name: Super price checker
+apk name: com.supricechekerpro
+
+
+cách làm: 
+ làm giao diện như hình mau1.png -> mau3, mau_win,lose
+Ng dung click start hiện giá của từng món ở trên các món đó
+Cho ng chơi ghi nhớ giá từng món
+Khi ng chơi bấm continue để chơi thì ra từng món và ô chọn để người dùng nhập giá,
+nếu sai thì hiện thông báo lose, đúng thì ra món tiếp theo
+
+
+1 lần play tốn 1 turn
+
+
+mặc định có 20 turn
+
+click vào nút bên trái để mua hàng
+
+
+turn : 100,200,300,400
+Price: 0.99,1.99,4.99,9.99
+
+Sub:500,1000
+Price: 10$/week, 20$/tháng

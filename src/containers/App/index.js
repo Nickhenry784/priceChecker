@@ -37,7 +37,7 @@ function App({ dispatch, turn, isShowShopping }) {
           onPress={onSetShowShopping}
           onLongPress={onSetShowShopping}
           style={appStyle.heartButton}>
-          <Image source={images.home.heart} style={appStyle.heartImage} />
+          <Image source={images.home.turn} style={appStyle.heartImage} />
           <Text style={appStyle.turnText}>{turn}</Text>
         </TouchableOpacity>
       )}

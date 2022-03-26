@@ -1,4 +1,4 @@
-package com.minibtsimleappflip;
+package com.supricechekerpro;
 
 import com.facebook.react.ReactActivity;
 

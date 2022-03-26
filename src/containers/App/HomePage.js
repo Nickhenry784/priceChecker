@@ -1,59 +1,49 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, TouchableOpacity, Alert, Animated } from 'react-native';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+  ImageBackground,
+  Text,
+} from 'react-native';
 import { images } from 'assets/images';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { SizedBox } from 'sizedbox';
-import { FlatGrid } from 'react-native-super-grid';
 import { randomIntFromInterval } from 'utils/number';
-import { makeSelectIsPlayState, makeSelectTurn } from './selectors';
-import { appStyle } from './style';
-import { decrementTurn } from './actions';
-
-const listBottlesImage = [
-  images.home.bottles1,
-  images.home.bottles2,
-  images.home.bottles3,
-  images.home.bottles4,
-];
+import { shopData } from './data/shop';
+import { makeSelectTurn } from './selectors';
+import { appStyle, shopItemStyle } from './style';
+import PricePage from './PricePage';
+import WinPage from './WinPage';
 
 function HomePage({ dispatch, turn }) {
-  const [rotateList, setRotateList] = useState([0, 0, 0, 0]);
   const [play, setPlay] = useState(false);
-  const [time, setTime] = useState(300);
-  const resultValue = useRef(4);
+  const [priceChecker, setPriceChecker] = useState(false);
+  const [time, setTime] = useState(100);
+  const [listPrice, setListPrice] = useState([]);
+  const [shopItems, setShopItems] = useState([]);
+  const [winPageState, setWinPageState] = useState(false);
+  const [resultValue, setResultValue] = useState(true);
 
   useEffect(() => {
-    const timeCountDown = 5;
-    const coutDown = setTimeout(() => {
-      if (play && time <= 0) {
-        setPlay(false);
-        setTime(300);
-        dispatch(decrementTurn());
-        // eslint-disable-next-line no-plusplus
-        for (let index = 0; index < listBottlesImage.length; index++) {
-          const element = rotateList[index];
-          if (element === 0) {
-            resultValue.current += 1;
-          }
-        }
-      }
+    const timeCountDown = 10;
+    const timeOut = setTimeout(() => {
       if (play && time > 0) {
+        const list = [...listPrice];
         setTime(time - timeCountDown);
-        const list = [...rotateList];
         // eslint-disable-next-line no-plusplus
-        for (let index = 0; index < listBottlesImage.length; index++) {
-          rotateList[index] =
-            randomIntFromInterval(0, 3) === 0
-              ? randomIntFromInterval(0, 360) * 0
-              : randomIntFromInterval(0, 360);
-          // setRotateList([...rotateList, 0]);
+        for (let index = 0; index < shopData.length; index++) {
+          const priceItems = randomIntFromInterval(1, 150);
+          list.push(priceItems);
+          setListPrice(list);
         }
       }
     }, timeCountDown);
     return () => {
-      clearTimeout(coutDown);
+      clearTimeout(timeOut);
     };
   }, [time, play]);
 
@@ -63,68 +53,81 @@ function HomePage({ dispatch, turn }) {
       return false;
     }
     setPlay(true);
-    resultValue.current = 0;
   };
 
-  return (
-    <View style={appStyle.homeView}>
-      <View style={appStyle.resultView}>
-        {!play && (
-          <Image
-            source={
-              resultValue.current === 4 ? images.home.win : images.home.lose
-            }
-            style={appStyle.resultImage}
-          />
-        )}
-      </View>
-      <SizedBox vertical={10} />
-      <View style={appStyle.bottlesView}>
-        <FlatGrid
-          data={listBottlesImage}
-          spacing={10}
-          renderItem={({ item, index }) => (
-            <View>
-              {!play && (
-                <Image
-                  source={
-                    rotateList[index] === 0
-                      ? images.home.true
-                      : images.home.false
-                  }
-                  style={appStyle.stateResult}
-                />
-              )}
-              <Animated.View
-                style={[
-                  {
-                    width: 140,
-                    height: 160,
-                    marginBottom: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transform: [
-                      {
-                        rotate: `${rotateList[index]}deg`,
-                      },
-                    ],
-                  },
-                ]}>
-                <Image source={item} style={appStyle.bottlesImage} />
-              </Animated.View>
-            </View>
-          )}
+  const onClickContinueButton = () => {
+    setPriceChecker(true);
+    const list = [...shopItems];
+    // eslint-disable-next-line no-plusplus
+    for (let index = 0; index < shopData.length; index++) {
+      const priceItems = {
+        id: shopData[index].id,
+        image: shopData[index].imageLink,
+        price: listPrice[index],
+      };
+      list.push(priceItems);
+      setShopItems(list);
+    }
+  };
+
+  const handleLosePriceItem = value => {
+    setPriceChecker(false);
+    setWinPageState(true);
+    setResultValue(value);
+  };
+
+  const handleClickBackButton = () => {
+    setWinPageState(false);
+    setPlay(false);
+    setTime(100);
+    setListPrice([]);
+    setShopItems([]);
+  };
+
+  return priceChecker ? (
+    <PricePage
+      priceItems={shopItems}
+      handlePriceChecker={handleLosePriceItem}
+    />
+  ) : (
+    <>
+      {winPageState ? (
+        <WinPage
+          resultValue={resultValue}
+          handleClickBackButton={handleClickBackButton}
         />
-      </View>
-      <SizedBox vertical={10} />
-      {!play && (
-        <TouchableOpacity
-          onPress={onClickPlayButton}
-          onLongPress={onClickPlayButton}>
-          <Image source={images.home.play} style={appStyle.playImage} />
-        </TouchableOpacity>
+      ) : (
+        <View style={appStyle.homeView}>
+          <SizedBox vertical={5} />
+          {play && (
+            <Text style={appStyle.labelText}>
+              Plz Remember Price of items on the shop
+            </Text>
+          )}
+          <TouchableOpacity
+            onPress={play ? onClickContinueButton : onClickPlayButton}
+            onLongPress={play ? onClickContinueButton : onClickPlayButton}>
+            <Image
+              source={play ? images.home.continue : images.home.start}
+              style={appStyle.playImage}
+            />
+          </TouchableOpacity>
+          <ImageBackground source={images.home.shop} style={appStyle.shopImgae}>
+            {shopData.map((item, index) => (
+              <View style={shopItemStyle(item.top, item.left)} key={item.id}>
+                {play && (
+                  <Text style={appStyle.priceText}>
+                    {`$${listPrice[index]}`}
+                  </Text>
+                )}
+                <Image source={item.imageLink} style={appStyle.shopItemImage} />
+              </View>
+            ))}
+          </ImageBackground>
+          <Image source={images.home.man} style={appStyle.footerImage} />
+        </View>
       )}
-    </View>
+    </>
   );
 }
 

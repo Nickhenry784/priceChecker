@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "react-native-async-storage/async-storage",
     "immer": "^9.0.12",
     "prop-types": "^15.8.1",
     "react": "17.0.2",

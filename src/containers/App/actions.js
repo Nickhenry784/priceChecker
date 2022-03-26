@@ -5,6 +5,7 @@ import {
   DECREMENT_TURN,
   SET_SHOW_SHOPPING,
   SET_PLAY_STATE,
+  SET_SHOP_ITEM,
 } from './constants';
 
 export const setTurn = turn => ({
@@ -20,6 +21,11 @@ export const setPlayState = isPlayState => ({
 export const incrementTurn = amount => ({
   type: INCREMENT_TURN,
   amount,
+});
+
+export const setShopItem = shopItem => ({
+  type: SET_SHOP_ITEM,
+  shopItem,
 });
 
 export const decrementTurn = (amount = 1) => ({
