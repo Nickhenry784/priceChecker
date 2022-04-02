@@ -1,0 +1,44 @@
+Name app: Menu Memory Foods Game
+Apkname: com.gamememoryfoodezg
+Tương tự app ghi nhớ giá siêu thị ấy
+Ra menu + giá, nhấn play thì hiện tường món 1 cho ng dùng chọn đáp án
+
+
+1 lần click chơi tốn 1 turn
+
+
+
+turn : 50,100,200,300
+Price: 0.99,1.99,4.99,9.99
+
+Sub:500,1000
+Price: 10$/week, 20$/tháng
+
+
+
+Info name + giá tự sinh ra random 10-100$ nhé:
+
+Rendang 
+Pizza
+Sushi
+Tom Yum
+Dimsum
+Massaman
+Ramen
+Lasagna
+Pasta
+Macaron
+Coxinhas
+Wiener Schnitzel
+Ohmi-gyu
+Fajitas
+Champ
+Lasagna
+Poke
+Croissant
+Bunny chow
+Donut
+Pastel de nata
+Pierogi
+Bibimbap
+Kebab

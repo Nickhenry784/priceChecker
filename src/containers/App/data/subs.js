@@ -1,11 +1,11 @@
 const subs = [
   {
-    sku: 'a1_s_300',
-    value: 300,
+    sku: 'gamememoryfoodezg_s_300',
+    value: 500,
   },
   {
-    sku: 'a1_s_600',
-    value: 600,
+    sku: 'gamememoryfoodezg_s_600',
+    value: 1000,
   },
 ];
 

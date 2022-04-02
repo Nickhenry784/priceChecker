@@ -12,36 +12,32 @@ import { images } from 'assets/images';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { SizedBox } from 'sizedbox';
+import { FlatList } from 'react-native-gesture-handler';
 import { randomIntFromInterval } from 'utils/number';
-import { shopData } from './data/shop';
 import { makeSelectTurn } from './selectors';
-import { appStyle, shopItemStyle } from './style';
+import { appStyle } from './style';
 import PricePage from './PricePage';
-import WinPage from './WinPage';
+import { listMenu } from './data/menu';
+import { decrementTurn } from './actions';
 
 function HomePage({ dispatch, turn }) {
   const [play, setPlay] = useState(false);
   const [priceChecker, setPriceChecker] = useState(false);
-  const [time, setTime] = useState(100);
+  const [time, setTime] = useState(30);
   const [listPrice, setListPrice] = useState([]);
-  const [shopItems, setShopItems] = useState([]);
   const [winPageState, setWinPageState] = useState(false);
-  const [resultValue, setResultValue] = useState(true);
+  const [resultValue, setResultValue] = useState(0);
+  const [okButton, setOkButton] = useState(false);
 
   useEffect(() => {
-    const timeCountDown = 10;
     const timeOut = setTimeout(() => {
       if (play && time > 0) {
-        const list = [...listPrice];
-        setTime(time - timeCountDown);
-        // eslint-disable-next-line no-plusplus
-        for (let index = 0; index < shopData.length; index++) {
-          const priceItems = randomIntFromInterval(1, 150);
-          list.push(priceItems);
-          setListPrice(list);
-        }
+        setTime(time - 1);
       }
-    }, timeCountDown);
+      if (play && time === 0) {
+        setPriceChecker(true);
+      }
+    }, 1000);
     return () => {
       clearTimeout(timeOut);
     };
@@ -52,82 +48,104 @@ function HomePage({ dispatch, turn }) {
       Alert.alert('Please buy more turn');
       return false;
     }
+    dispatch(decrementTurn());
+    setOkButton(true);
     setPlay(true);
-  };
-
-  const onClickContinueButton = () => {
-    setPriceChecker(true);
-    const list = [...shopItems];
+    const list = [];
     // eslint-disable-next-line no-plusplus
-    for (let index = 0; index < shopData.length; index++) {
-      const priceItems = {
-        id: shopData[index].id,
-        image: shopData[index].imageLink,
-        price: listPrice[index],
+    for (let index = 0; index < listMenu.length; index++) {
+      const element = listMenu[index];
+      const listItem = {
+        id: index + 1,
+        title: element,
+        price: randomIntFromInterval(10, 99),
       };
-      list.push(priceItems);
-      setShopItems(list);
+      list.push(listItem);
     }
+    setListPrice(list);
   };
 
-  const handleLosePriceItem = value => {
-    setPriceChecker(false);
-    setWinPageState(true);
+  const hanldeWinGame = value => {
     setResultValue(value);
+    setPriceChecker(false);
+    setTime(30);
+    setPlay(false);
+    setOkButton(false);
+    setWinPageState(true);
   };
 
-  const handleClickBackButton = () => {
-    setWinPageState(false);
-    setPlay(false);
-    setTime(100);
-    setListPrice([]);
-    setShopItems([]);
+  const onClickOkButton = () => {
+    setTime(0);
+    setPriceChecker(true);
   };
+
+  const onClickReplayButton = () => {
+    setWinPageState(false);
+    setResultValue(0);
+  };
+
+  const renderItem = ({ item, index }) => (
+    <View style={appStyle.itemView}>
+      <View style={appStyle.itemMenuText}>
+        <Text style={appStyle.itemText}>{item}</Text>
+      </View>
+      {play && (
+        <Text style={appStyle.itemText}>{`$${listPrice[index].price}`}</Text>
+      )}
+    </View>
+  );
 
   return priceChecker ? (
-    <PricePage
-      priceItems={shopItems}
-      handlePriceChecker={handleLosePriceItem}
-    />
+    <PricePage priceItems={listPrice} handlePriceChecker={hanldeWinGame} />
   ) : (
-    <>
-      {winPageState ? (
-        <WinPage
-          resultValue={resultValue}
-          handleClickBackButton={handleClickBackButton}
-        />
-      ) : (
-        <View style={appStyle.homeView}>
-          <SizedBox vertical={5} />
-          {play && (
-            <Text style={appStyle.labelText}>
-              Plz Remember Price of items on the shop
-            </Text>
-          )}
+    <View style={appStyle.homeView}>
+      <Text style={play ? appStyle.timeText : appStyle.menuText}>
+        {play ? time : 'MENU MEMORY'}
+      </Text>
+      <Image source={images.home.item4} style={appStyle.item4Image} />
+      <View style={appStyle.bottomView}>
+        <View style={appStyle.leftBottomView}>
+          <Image source={images.home.item1} style={appStyle.item1Image} />
+          <Image source={images.home.item2} style={appStyle.item2Image} />
+          <Image source={images.home.item3} style={appStyle.item3Image} />
+          <Image source={images.home.item5} style={appStyle.item5Image} />
+        </View>
+        <View style={appStyle.rightBottomView}>
+          <ImageBackground
+            source={images.home.frame}
+            style={appStyle.frameImage}>
+            <FlatList
+              data={listMenu}
+              renderItem={(item, index) => renderItem(item, index)}
+              scrollEnabled
+              keyExtractor={(item, index) => index}
+            />
+          </ImageBackground>
           <TouchableOpacity
-            onPress={play ? onClickContinueButton : onClickPlayButton}
-            onLongPress={play ? onClickContinueButton : onClickPlayButton}>
+            onPress={okButton ? onClickOkButton : onClickPlayButton}
+            onLongPress={okButton ? onClickOkButton : onClickPlayButton}>
             <Image
-              source={play ? images.home.continue : images.home.start}
+              source={okButton ? images.home.ok : images.home.play}
               style={appStyle.playImage}
             />
           </TouchableOpacity>
-          <ImageBackground source={images.home.shop} style={appStyle.shopImgae}>
-            {shopData.map((item, index) => (
-              <View style={shopItemStyle(item.top, item.left)} key={item.id}>
-                {play && (
-                  <Text style={appStyle.priceText}>
-                    {`$${listPrice[index]}`}
-                  </Text>
-                )}
-                <Image source={item.imageLink} style={appStyle.shopItemImage} />
-              </View>
-            ))}
-          </ImageBackground>
-          <Image source={images.home.man} style={appStyle.footerImage} />
         </View>
+      </View>
+      {winPageState && (
+        <ImageBackground
+          source={images.home.popupwin}
+          style={appStyle.winImage}>
+          <View style={appStyle.scoreView}>
+            <Text style={appStyle.scoreWin}>{resultValue}</Text>
+            <TouchableOpacity
+              onPress={onClickReplayButton}
+              onLongPress={onClickReplayButton}>
+              <Image source={images.home.replay} style={appStyle.playImage} />
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
       )}
-    </>
+    </View>
   );
 }
 
