@@ -331,23 +331,17 @@ export const buttonStyle = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    color: 'white',
+    width: 150,
+    height: 50,
+    marginLeft: 20,
+    marginBottom: 40,
     textAlign: 'center',
     padding: 5,
-  },
-  buttonText: {
-    backgroundColor: '#cacaca',
-    borderRadius: 2,
-    marginBottom: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 100,
-    borderWidth: 2,
-    borderColor: 'black',
   },
   text: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'AbrilFatface-Regular',
   },
   textSmall: {

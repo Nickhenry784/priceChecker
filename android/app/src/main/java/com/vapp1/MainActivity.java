@@ -1,4 +1,4 @@
-package com.supricechekerpro;
+package com.perchuc.supricechekerpro;
 
 import com.facebook.react.ReactActivity;
 

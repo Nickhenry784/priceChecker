@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { images } from 'assets/images';
 import { buttonStyle } from './style';
 import dataBuys from './data/buys';
-import dataSubs from './data/subs';
 
 function Button({ type, item, onClick }) {
   const onPressButton = () => {
@@ -11,21 +11,19 @@ function Button({ type, item, onClick }) {
   };
 
   return item?.value ? (
-    <View style={buttonStyle.button}>
-      <View style={buttonStyle.buttonText}>
-        <TouchableOpacity onPress={onPressButton} onLongPress={onPressButton}>
-          <>
-            <Text style={buttonStyle.text}>{`${item?.value} ${type}`}</Text>
-            <Text style={buttonStyle.textSmall}>{item?.localizedPrice}</Text>
-          </>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <ImageBackground style={buttonStyle.button} source={images.home.buybutton}>
+      <TouchableOpacity onPress={onPressButton} onLongPress={onPressButton}>
+        <>
+          <Text style={buttonStyle.text}>{`${item?.value} ${type}`}</Text>
+          <Text style={buttonStyle.textSmall}>{item?.localizedPrice}</Text>
+        </>
+      </TouchableOpacity>
+    </ImageBackground>
   ) : null;
 }
 
 Button.propTypes = {
-  type: PropTypes.oneOf(['TURN', 'SUB']),
+  type: PropTypes.oneOf(['TURN']),
   item: PropTypes.object,
   onClick: PropTypes.func,
 };

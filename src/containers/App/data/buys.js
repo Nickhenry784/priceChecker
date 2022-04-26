@@ -1,18 +1,18 @@
 const buys = [
   {
-    sku: 'gamememoryfoodezg_t_100',
+    sku: 'gamememoryfoodezg_t_50',
     value: 50,
   },
   {
-    sku: 'gamememoryfoodezg_t_200',
+    sku: 'gamememoryfoodezg_t_100',
     value: 100,
   },
   {
-    sku: 'gamememoryfoodezg_t_300',
+    sku: 'gamememoryfoodezg_t_200',
     value: 200,
   },
   {
-    sku: 'gamememoryfoodezg_t_400',
+    sku: 'gamememoryfoodezg_t_300',
     value: 300,
   },
 ];
