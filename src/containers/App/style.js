@@ -1,4 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 export const shopItemStyle = (x, y) =>
   StyleSheet.create({
@@ -125,11 +128,11 @@ export const appStyle = StyleSheet.create({
     justifyContent: 'center',
   },
   footerImage: {
-    width: 250,
-    height: 250,
+    width: windowWidth * 0.6,
+    height: windowWidth * 0.6,
     resizeMode: 'contain',
     position: 'absolute',
-    bottom: '6%',
+    bottom: '3%',
     right: '0%',
   },
   stateResult: {
@@ -213,19 +216,19 @@ export const buttonStyle = StyleSheet.create({
     padding: 5,
   },
   buttonText: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'white',
     borderRadius: 2,
     marginBottom: 5,
     paddingVertical: 10,
     paddingHorizontal: 100,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: 'red',
   },
   text: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 25,
+    fontFamily: 'LightBeach',
   },
   textSmall: {
     color: 'white',

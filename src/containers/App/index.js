@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { images } from 'assets/images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { makeSelectIsShowShopping, makeSelectTurn } from './selectors';
 import { appStyle } from './style';
 import saga from './saga';
 import reducer from './reducer';
 import Layout from './Layout';
-import Buttons from './Buttons';
+import Payment from './Payment';
 import HomePage from './HomePage';
-import { setShowShopping } from './actions';
+import { setShowShopping, setTurn } from './actions';
 
 const key = 'App';
+const STORAGE_TURN = '@turn';
 
 function App({ dispatch, turn, isShowShopping }) {
   useInjectSaga({ key, saga });
@@ -24,12 +26,34 @@ function App({ dispatch, turn, isShowShopping }) {
     dispatch(setShowShopping(!isShowShopping));
   };
 
+  const readData = async () => {
+    try {
+      const value = await AsyncStorage.getItem(STORAGE_TURN);
+      console.log(value);
+
+      if (value === null) {
+        dispatch(setTurn(10));
+      }
+
+      if (value !== null) {
+        dispatch(setTurn(value));
+      }
+    } catch (e) {
+      alert('Failed to fetch the input from storage');
+    }
+  };
+
+  useEffect(() => {
+    readData();
+  }, []);
+
   return (
     <Layout turn={turn}>
       {isShowShopping ? (
         <TouchableOpacity
           onPress={onSetShowShopping}
-          onLongPress={onSetShowShopping}>
+          onLongPress={onSetShowShopping}
+          style={appStyle.heartButton}>
           <Text style={appStyle.backText}>Back</Text>
         </TouchableOpacity>
       ) : (
@@ -41,14 +65,14 @@ function App({ dispatch, turn, isShowShopping }) {
           <Text style={appStyle.turnText}>{turn}</Text>
         </TouchableOpacity>
       )}
-      {isShowShopping ? <Buttons /> : <HomePage />}
+      {isShowShopping ? <Payment /> : <HomePage />}
     </Layout>
   );
 }
 
 App.propTypes = {
   dispatch: PropTypes.func,
-  turn: PropTypes.number,
+  turn: PropTypes.any,
   isShowShopping: PropTypes.bool,
 };
 

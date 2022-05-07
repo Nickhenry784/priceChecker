@@ -1,5 +1,5 @@
 name: Super price checker
-apk name: com.supricechekerpro
+apk name: com.nickemard.bestcheckedmarket
 
 
 cách làm: 

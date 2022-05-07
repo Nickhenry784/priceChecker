@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 export const images = {
   home: {
-    background: require('./home/Background.png'),
+    background: require('./home/background.png'),
     item1: require('./home/Items/1.png'),
     item2: require('./home/Items/2.png'),
     item3: require('./home/Items/3.png'),

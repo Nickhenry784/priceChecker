@@ -1,4 +1,4 @@
-package com.supricechekerpro;
+package com.nickemard.bestcheckedmarket;
 
 import com.facebook.react.ReactActivity;
 
